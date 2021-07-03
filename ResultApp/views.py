@@ -170,6 +170,7 @@ def UsersApi(request,uid=0):
         return JsonResponse(data, safe = False)
     elif request.method =='POST':
         users_data = JSONParser().parse(request)
+        print((users_data))
         user, student = userTypeFun(users_data)
         users_serializer = UsersSerializer(data=user)
         if users_serializer.is_valid():
@@ -186,11 +187,11 @@ def UsersApi(request,uid=0):
         users_data = JSONParser().parse(request)
         users = Users.objects.get(username = users_data['username'])
         user,stuClass = userTypeFun(users_data)
-        users_serializer = UsersSerializer(users, data = users)
-        if users_serializer.data['usertype'] == 3:
+        users_serializer = UsersSerializer(users, data = user)
+        if users_serializer.is_valid():
             users_serializer.save()
             if users_serializer.data['usertype'] == 3:
-                stuClasses = StudentClass.objects.get(student = users_serializer.data['id'])
+                stuClasses = StudentClass.objects.filter(students = users_serializer.data['id'])
                 stuClass_serializer = StudentClassSerializer(stuClasses, data = stuClass)
                 if stuClass_serializer.is_valid():
                     stuClass_serializer.save()

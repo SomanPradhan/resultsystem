@@ -4,6 +4,7 @@ from ResultApp import views
 urlpatterns = [
     url(r'^classes/$', views.classApi),
     url(r'^classes/([0-9]+)$', views.classApi),
+    url(r'^users/([0-9]+)$', views.UsersApi),
     url(r'^users/$', views.UsersApi),
     url(r'^subjects/$', views.SubjectApi),
     url(r'^subjects/([0-9]+)/$', views.SubjectApi),
