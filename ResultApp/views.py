@@ -203,10 +203,10 @@ def UsersApi(request,uid=0):
             return JsonResponse("Users Updated Successfully", safe=False)
         return JsonResponse("Failed to Update", safe=False)
     elif request.method == 'DELETE':
-        user = Users.object.get(id=uid)
+        user = Users.objects.get(id=uid)
         user_serializer = UsersSerializer(user)
         if user_serializer.data['usertype'] == 3:
-            stuClass = StudentClass.objects.get(students=user_serializer.data['id'])
+            stuClass = StudentClass.objects.filter(students=user_serializer.data['id'])
             stuClass.delete()
             stuSubject = StudentSubject.objects.filter(student=user_serializer.data['id'])
             stuSubject.delete()
