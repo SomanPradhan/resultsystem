@@ -162,9 +162,14 @@ def UserLogin(request):
 @csrf_exempt
 def UsersApi(request,uid=0):
     if request.method=='GET':
-        users = Users.objects.all()
-        stuClass = StudentClass.objects.all()
-        users_serializer = UsersSerializer(users, many=True)
+        if uid==0:
+            users = Users.objects.all()
+            stuClass = StudentClass.objects.all()
+            users_serializer = UsersSerializer(users, many=True)
+        else:
+            users = Users.objects.filter(uid)
+            stuClass = StudentClass.objects.all()
+            users_serializer = UsersSerializer(users, many=True)
         stuClass_serializer = StudentClassSerializer(stuClass, many=True)
         data = getMutipleUser(users_serializer.data, stuClass_serializer.data)
         return JsonResponse(data, safe = False)
