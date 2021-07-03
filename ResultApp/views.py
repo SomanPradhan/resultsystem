@@ -167,7 +167,7 @@ def UsersApi(request,uid=0):
             stuClass = StudentClass.objects.all()
             users_serializer = UsersSerializer(users, many=True)
         else:
-            users = Users.objects.filter(uid)
+            users = Users.objects.filter(id=uid)
             stuClass = StudentClass.objects.all()
             users_serializer = UsersSerializer(users, many=True)
         stuClass_serializer = StudentClassSerializer(stuClass, many=True)
