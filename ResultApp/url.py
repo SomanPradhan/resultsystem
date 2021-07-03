@@ -6,6 +6,7 @@ urlpatterns = [
     url(r'^classes/([0-9]+)$', views.classApi),
     url(r'^users/([0-9]+)$', views.UsersApi),
     url(r'^users/$', views.UsersApi),
+    url(r'^login/$', views.UserLogin),
     url(r'^subjects/$', views.SubjectApi),
     url(r'^subjects/([0-9]+)/$', views.SubjectApi),
     url(r'^teacher/([0-9]+)/subjects/$', views.TeacherSubjectApi),
