@@ -115,9 +115,14 @@ def studentTestMap(tests, students):
 @csrf_exempt
 def classApi(request,cid=0):
     if request.method=='GET':
-        classes = Classes.objects.all()
-        classes_serializer = ClassSerializer(classes, many=True)
-        return JsonResponse(classes_serializer.data, safe = False)
+        if cid ==0:
+            classes = Classes.objects.all()
+            classes_serializer = ClassSerializer(classes, many=True)
+            return JsonResponse(classes_serializer.data, safe = False)
+        else:
+            classes = Classes.objects.get(id = cid)
+            classes_serializer = ClassSerializer(classes)
+            return JsonResponse(classes_serializer.data, safe = False)
     elif request.method =='POST':
         classes_data = JSONParser().parse(request)
         classes_serializer = ClassSerializer(data=classes_data)
