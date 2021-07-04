@@ -18,6 +18,10 @@ def checkTest(data):
     else:
         return True
     
+
+        
+
+
 def archiveDeleteSubject(subject):
     subject1 = {}
     if checkTest(subject):
@@ -123,25 +127,25 @@ def classApi(request,cid=0):
         return JsonResponse("Failed To Add class", safe=False)
     elif request.method == 'PUT':
         classes_data = JSONParser().parse(request)
-        classes = Classes.objects.get(id = classes_data['id'])
+        classes = Classes.objects.filter(id = classes_data['id'])
         classes_serializer = ClassSerializer(classes, data = classes_data)
         if classes_serializer.is_valid():
             classes_serializer.save()
             return JsonResponse("Class Updated Successfully", safe=False)
         return JsonResponse("Failed to Update", safe=False)
     elif request.method == 'DELETE':
-        classes = Classes.object.get(id=cid)
-        stuClass = StudentClass.objects.filter(id=cid)
+        classes = Classes.objects.get(id=cid)
+        stuClass = StudentClass.objects.filter(classval=cid)
         stuClass_serializer = StudentClassSerializer(stuClass, many=True)
-        stuClasses_serializer = StudentClassSerializer(stuClass_serializer.data, data=deassigStudent(stuClass_serializer.data), many=True)
-        if stuClass_serializer.is_valid():
+        stuClasses_serializer = StudentClassSerializer(stuClass_serializer.data, data=deassigStudent(stuClass_serializer.data), many =True)
+        if stuClasses_serializer.is_valid():
             stuClasses_serializer.save()
-            subjects = Subjects.objects.filter(classval = cid)
-            subjects_serializer = SubjectSerializer(subjects, many = True)
-            for subject in subjects_serializer.data:
-                archiveDeleteSubject(subject)
-            classes.delete()
-            return JsonResponse('Classes Deleted Successfully', safe=False)
+        subjects = Subjects.objects.filter(classval = cid)
+        subjects_serializer = SubjectSerializer(subjects, many = True)
+        for subject in subjects_serializer.data:
+            archiveDeleteSubject(subject)
+        classes.delete()
+        return JsonResponse('Classes Deleted Successfully', safe=False)
 
 @csrf_exempt
 def UserTypeApi(request):
@@ -246,7 +250,7 @@ def SubjectApi(request,sid=0):
             return JsonResponse("Subject Updated Successfully", safe=False)
         return JsonResponse("Failed to Update", safe=False)
     elif request.method == 'DELETE':
-        subject = Subjects.object.get(id=sid)
+        subject = Subjects.objects.get(id=sid)
         subject.delete()
         return JsonResponse('Subject Deleted Successfully', safe=False)
 
@@ -257,6 +261,13 @@ def TeacherSubjectApi(request, tid):
         subjects = Subjects.objects.all().filter(teacher = tid)
         subject_serializer = SubjectSerializer(subjects, many=True)
         return JsonResponse(subject_serializer.data, safe = False)
+
+@csrf_exempt
+def TeacherApi(request):
+    if request.mehod=='GET':
+        teacher = Users.objects.filter(usertype=2)
+        teacher_serializer = UsersSerializer(teacher, many=True)
+        return JsonResponse(teacher_serializer, safe=False)
 
 @csrf_exempt
 def StudentSubjectApi(request, stid):
