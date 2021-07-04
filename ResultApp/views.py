@@ -264,10 +264,10 @@ def TeacherSubjectApi(request, tid):
 
 @csrf_exempt
 def TeacherApi(request):
-    if request.mehod=='GET':
+    if request.method=='GET':
         teacher = Users.objects.filter(usertype=2)
         teacher_serializer = UsersSerializer(teacher, many=True)
-        return JsonResponse(teacher_serializer, safe=False)
+        return JsonResponse(teacher_serializer.data, safe=False)
 
 @csrf_exempt
 def StudentSubjectApi(request, stid):
