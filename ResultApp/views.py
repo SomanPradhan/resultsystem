@@ -158,10 +158,11 @@ def UserTypeApi(request):
 def UserLogin(request):
     if request.method=='POST':
         user_data = JSONParser().parse(request)
-        user = UserType.objects.filter(username=user_data['username'])
-        user_serializer = UserTypeSerializer(user, many=True)
+        user = Users.objects.get(username=user_data['username'])
+        user_serializer = UsersSerializer(user)
         if user_serializer.data['password'] == user_data['password']:
             return JsonResponse(user_serializer.data, safe = False)
+        return JsonResponse('Cannot Login', safe = False) 
  
 @csrf_exempt
 def UsersApi(request,uid=0):
@@ -285,12 +286,12 @@ def EnrollSubject(request, stid):
     if request.method=='GET':
         stuclass = StudentClass.objects.filter(students = stid)
         stuclass_serializer = StudentClassSerializer(stuclass)
-        stuSubject = Subjects.objects.filter(student = stid)
-        stuSubject_serializer = SubjectSerializer(stuSubject, many = True)
+        stuSubject = StudentClass.objects.filter(student = stid)
+        stuSubject_serializer = StudentSubjectSerializer(stuSubject, many = True)
         subjects = Subjects.objects.filter(classval = stuclass_serializer.data['classval'])
         subjects_serializer = SubjectSerializer(subjects, many = True)
         data = studentEnroll(subjects_serializer.data, stuSubject_serializer.data)
-        return JsonResponse(data, safe = False)
+        return JsonResponse(dict(data), safe = False)
     elif request.method=='POST':
         stuSubject_data = JSONParser().parse(request)
         stuSubject_serializer = StudentSubjectSerializer(stuSubject_data)
