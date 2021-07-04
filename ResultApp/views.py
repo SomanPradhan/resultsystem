@@ -195,7 +195,7 @@ def UsersApi(request,uid=0):
         return JsonResponse("Failed To Add user", safe=False)
     elif request.method == 'PUT':
         users_data = JSONParser().parse(request)
-        users = Users.objects.get(username = users_data['username'])
+        users = Users.objects.get(id = uid)
         user,stuClass = userTypeFun(users_data)
         users_serializer = UsersSerializer(users, data = user)
         if users_serializer.is_valid():
