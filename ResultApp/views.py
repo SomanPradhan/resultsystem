@@ -127,7 +127,7 @@ def classApi(request,cid=0):
         return JsonResponse("Failed To Add class", safe=False)
     elif request.method == 'PUT':
         classes_data = JSONParser().parse(request)
-        classes = Classes.objects.filter(id = classes_data['id'])
+        classes = Classes.objects.filter(id = cid)
         classes_serializer = ClassSerializer(classes, data = classes_data)
         if classes_serializer.is_valid():
             classes_serializer.save()
