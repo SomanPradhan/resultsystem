@@ -314,14 +314,14 @@ def TeacherTestApi(request, sid, tid=0):
         result = Result.objects.values('test').annotate(avgGrade = Avg('marks'))
         test_serializer = TestSerializer(test, many = True)
         data = testAvgGrade(test_serializer.data, result)
-        return JsonResponse(data, safe=True)
+        return JsonResponse(dict(data), safe=True)
     elif request.method=='POST':
         test = JSONParser().parse(request)
         test_serializer = TestSerializer(data=test)
         if test_serializer.is_valid():
             test_serializer.save()
             return JsonResponse('Test Added Successfully', safe = False)
-        return JsonResponse('Failde To Add Test', safe = False)
+        return JsonResponse('Failed To Add Test', safe = False)
     elif request.method == 'PUT':
         test_data = JSONParser().parse(request)
         test = Tests.objects.get(id = test_data['id'])
