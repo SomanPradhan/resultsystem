@@ -233,7 +233,7 @@ def UsersApi(request,uid=0):
             return JsonResponse('Classes Deleted Successfully', safe=False)
         return JsonResponse('Cannot Delete',safe=False)
 
-@csrf_exempt
+@csrf_exempt # Admin view
 def SubjectApi(request,sid=0):
     if request.method=='GET':
         subjects = Subjects.objects.all()
@@ -260,13 +260,14 @@ def SubjectApi(request,sid=0):
         subject.delete()
         return JsonResponse('Subject Deleted Successfully', safe=False)
 
-
+# Shows subjects which a teacher who is login showed.
 @csrf_exempt
 def TeacherSubjectApi(request, tid):
     if request.method=='GET':
         subjects = Subjects.objects.all().filter(teacher = tid)
         subject_serializer = SubjectSerializer(subjects, many=True)
         return JsonResponse(subject_serializer.data, safe = False)
+
 
 @csrf_exempt
 def TeacherApi(request):
