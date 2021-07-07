@@ -236,8 +236,12 @@ def UsersApi(request,uid=0):
 @csrf_exempt # Admin view
 def SubjectApi(request,sid=0):
     if request.method=='GET':
-        subjects = Subjects.objects.all()
-        subject_serializer = SubjectSerializer(subjects, many=True)
+        if sid ==0:
+            subjects = Subjects.objects.all()
+            subject_serializer = SubjectSerializer(subjects, many=True)
+        else:
+            subjects = Subjects.objects.get(id = sid)
+            subject_serializer = SubjectSerializer(subjects)
         return JsonResponse(subject_serializer.data, safe = False)
     elif request.method =='POST':
         subjects_data = JSONParser().parse(request)
